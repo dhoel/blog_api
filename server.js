@@ -35,6 +35,39 @@ app.post('/blogposts', jsonParser, (req, res) => {
     res.status(201).json(item);
 });
 
+app.put('/blogposts/:id', jsonParser, (req, res) => {
+    const requiredFields = ['title', 'content', 'author', 'publishDate'];
+    for (let i = 0; i < requiredFields.length; i++) {
+        const field = requiredFields[i];
+        if (!(field in req.body)) {
+            const message = `Missing \`${field}\` in request body`;
+            console.error(message);
+            return res.status(400).send(message);
+        }
+    }
+    if (req.params.id !== req.body.id) {
+        const message = (
+            `Request path id (${req.params.id}) and request body id `
+            `(${req.body.id}) must match`);
+        console.error(message);
+        return res.status(400).send(message);
+    }
+    console.log(`Updating blogposts \`${req.params.id}\``);
+    const updatedItem = BlogPosts.update({
+        id: req.params.id,
+        title: req.body.title,
+        content: req.body.content,
+        author: req.body.author,
+        publishDate: req.body.publishDate
+    });
+    res.status(204).json(updatedItem);
+});
+
+app.delete('/blogposts/:id', (req, res) => {
+    BlogPosts.delete(req.params.id);
+    console.log(`Deleted post list item \`${req.params.id}\``);
+    res.status(204).end();
+});
 
 app.listen(process.env.PORT || 8080, () => {
     console.log(`Your app is listening on port ${process.env.PORT || 8080}`);
