@@ -3,18 +3,17 @@ const router = express.Router();
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 
-const {
-    BlogPosts
-} = require('./models');
+const {BlogPosts} = require('./models');
 
-BlogPosts.create('Blog1', 'stuff and more stuff', 'fred', '2017-02-17');
-BlogPosts.create('Blog2', 'even more stuff', 'george', '2017-02-16');
-BlogPosts.create('Blogx', 'even more stuff', 'samantha', '2017-02-16');
+// BlogPosts.create('Blog1', 'stuff and more stuff', 'fred', '2017-02-17');
+// BlogPosts.create('Blog2', 'even more stuff', 'george', '2017-02-16');
+// BlogPosts.create('Blogx', 'even more stuff', 'samantha', '2017-02-16');
 
 
 router.get('/', (req, res) => {
     res.json(BlogPosts.get());
 })
+
 
 router.post('/', jsonParser, (req, res) => {
     const requiredFields = ['title', 'content', 'author', 'publishDate'];
